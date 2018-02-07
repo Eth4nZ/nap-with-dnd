@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Nap with DND</string>
+
+    <string name="alarm_set">Alarm set</string>
+    <string name="alarm_service_noti_content_title">Nap with DND</string>
+    <string name="alarm_service_noti_content_text">Press the button below to stop</string>
+
+    <string name="do_not_disturb_enabled">Do not disturb enabled</string>
+    <string name="do_not_disturb_permission_request">this app needs Do Not Disturb access</string>
+
+
+
+</resources>
