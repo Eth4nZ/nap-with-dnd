@@ -81,7 +81,7 @@ class AlarmService: Service() {
     private fun createForegroundNotification() {
         val channelId =
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    createNotificationChannel()
+                    AppUtil.createNotificationChannel(applicationContext, "nap_with_dnd_service", "Nap with DND service")
                 } else {
                     // If earlier version channel ID is not used
                     // https://developer.android.com/reference/android/support/v4/app/NotificationCompat.Builder.html#NotificationCompat.Builder(android.content.Context)
@@ -108,24 +108,10 @@ class AlarmService: Service() {
     }
 
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun createNotificationChannel(): String{
-        val channelId = "nap_with_dnd_service"
-        val channelName = "Nap with DND service"
-        val chan = NotificationChannel(channelId,
-                channelName, NotificationManager.IMPORTANCE_HIGH)
-        chan.lightColor = Color.BLUE
-        chan.importance = NotificationManager.IMPORTANCE_NONE
-        chan.lockscreenVisibility = Notification.VISIBILITY_PRIVATE
-        val service = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        service.createNotificationChannel(chan)
-        return channelId
-    }
-
-    override fun onDestroy() {
+   override fun onDestroy() {
         super.onDestroy()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            DndUtil.turnOffDoNotDisturb(applicationContext)
+            AppUtil.turnOffDoNotDisturb(applicationContext)
         }
     }
 }

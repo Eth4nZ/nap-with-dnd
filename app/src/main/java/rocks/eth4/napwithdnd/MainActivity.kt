@@ -1,6 +1,7 @@
 package rocks.eth4.napwithdnd
 
 import android.app.AlarmManager
+import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
@@ -34,7 +35,7 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         val TAG = MainActivity::class.java.simpleName!!
-        var notificationId = 0
+        var notificationId = 94020
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,8 +64,9 @@ class MainActivity : AppCompatActivity() {
                 .subscribe(
                         { _ ->
                             Log.d(TAG, "clicked")
+                            createNotification((value_tens_place*10+value_ones_place))
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                                DndUtil.turnOnDoNotDisturb(applicationContext)
+                                AppUtil.turnOnDoNotDisturb(applicationContext)
                             }
                         },
                         { error -> Log.e(TAG, error.message) }
@@ -75,8 +77,28 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    private fun createNotification(durationInMinute: Int) {
+        val channelId =
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    AppUtil.createNotificationChannel(applicationContext, "dnd_dismissable_notification", "DND dismissable notification")
+                } else {
+                    // If earlier version channel ID is not used
+                    // https://developer.android.com/reference/android/support/v4/app/NotificationCompat.Builder.html#NotificationCompat.Builder(android.content.Context)
+                    ""
+                }
+        //todo: pop up a notification to inform user the alarm has been set
+        val mBuilder = NotificationCompat.Builder(this, channelId)
+                .setSmallIcon(R.drawable.ic_dnd_nap_silhouette)
+                .setContentTitle(getString(R.string.upcoming_alarm))
+                .setContentText(durationInMinute.toString())
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
 
-    internal fun setupComponents() {
+        val mNotifyManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+        mNotifyManager.notify(++notificationId, mBuilder.build());
+    }
+
+
+    private fun setupComponents() {
         val sharedPref = PreferenceManager.getDefaultSharedPreferences(this)
         value_tens_place = sharedPref.getInt(PREF_KEY_TENS_PLACE, 0)
         value_ones_place = sharedPref.getInt(PREF_KEY_ONES_PLACE, 0)

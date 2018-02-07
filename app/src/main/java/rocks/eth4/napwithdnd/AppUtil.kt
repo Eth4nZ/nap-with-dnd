@@ -1,8 +1,11 @@
 package rocks.eth4.napwithdnd
 
+import android.app.Notification
+import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.os.Build
 import android.provider.Settings
 import android.support.annotation.RequiresApi
@@ -13,7 +16,7 @@ import android.widget.Toast
  * Created by eth4 on 7/2/18.
  */
 
-class DndUtil() {
+class AppUtil() {
 
 
     companion object {
@@ -48,6 +51,20 @@ class DndUtil() {
             }
 
         }
+
+
+        @RequiresApi(Build.VERSION_CODES.O)
+        fun createNotificationChannel(context: Context, channelId: String, channelName: String): String{
+            val chan = NotificationChannel(channelId,
+                    channelName, NotificationManager.IMPORTANCE_HIGH)
+            chan.lightColor = Color.BLUE
+            chan.importance = NotificationManager.IMPORTANCE_NONE
+            chan.lockscreenVisibility = Notification.VISIBILITY_PRIVATE
+            val service = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            service.createNotificationChannel(chan)
+            return channelId
+        }
+
 
 
     }
