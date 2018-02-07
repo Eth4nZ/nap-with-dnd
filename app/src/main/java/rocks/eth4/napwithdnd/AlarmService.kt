@@ -10,7 +10,6 @@ import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Build
 import android.os.IBinder
-import android.renderscript.RenderScript
 import android.support.annotation.RequiresApi
 import android.support.v4.app.NotificationCompat
 import android.util.Log
@@ -25,19 +24,21 @@ class AlarmService: Service() {
         private val TAG = AlarmService::class.java.simpleName
         private val ACTION_STOP_SERVICE = "rocks.eth4.napwithdnd.ACTION_STOP_SERVICE"
         private val NOTIFICATION_ID = 8964000
-        val mMediaPlayer = MediaPlayer()
     }
 
+    private val mMediaPlayer = MediaPlayer()
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
         if (ACTION_STOP_SERVICE == intent.action) {
             Log.d(TAG, "called to cancel service")
             mMediaPlayer.stop()
             stopSelf()
+            return Service.START_REDELIVER_INTENT
         }
 
-        playSound(context = applicationContext, alert = getAlarmUri())
+
         createForegroundNotification()
+        playSound(context = applicationContext, alert = getAlarmUri())
 
         return Service.START_REDELIVER_INTENT
     }
@@ -88,10 +89,9 @@ class AlarmService: Service() {
                 }
         val notificationBuilder = NotificationCompat.Builder(this, channelId)
 
-        val builder = notificationBuilder
-        builder.setWhen(System.currentTimeMillis())
+        notificationBuilder.setWhen(System.currentTimeMillis())
                 .setOngoing(true)
-                .setSmallIcon(R.mipmap.ic_alarm)
+                .setSmallIcon(R.drawable.ic_dnd_nap_silhouette)
                 .setContentTitle(getString(R.string.alarm_service_noti_content_title))
                 .setContentText(getString(R.string.alarm_service_noti_content_text))
                 .setCategory(NotificationCompat.CATEGORY_SERVICE)
@@ -100,9 +100,9 @@ class AlarmService: Service() {
         val stopSelf = Intent(this, AlarmService::class.java)
         stopSelf.action = ACTION_STOP_SERVICE
         val pStopSelf = PendingIntent.getService(this, 0, stopSelf, PendingIntent.FLAG_CANCEL_CURRENT)
-        builder.addAction(R.drawable.ic_access_alarm_black_24dp, "Stop Timer", pStopSelf)
-        //        manager.notify(NOTIFCATION_ID, builder.build());
-        val notification = builder.build()
+        notificationBuilder.addAction(R.drawable.ic_access_alarm_black_24dp, "Stop Timer", pStopSelf)
+        //        manager.notify(NOTIFICATION_ID, builder.build());
+        val notification = notificationBuilder.build()
 
         startForeground(NOTIFICATION_ID, notification)
     }
@@ -120,5 +120,12 @@ class AlarmService: Service() {
         val service = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         service.createNotificationChannel(chan)
         return channelId
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            DndUtil.turnOffDoNotDisturb(applicationContext)
+        }
     }
 }

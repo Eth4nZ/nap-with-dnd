@@ -1,6 +1,7 @@
 <resources>
-    <string name="app_name">Nap with DND</string>
+    <string name="app_name">DND Nap</string>
 
+    <string name="upcoming_alarm">Upcoming alarm</string>
     <string name="alarm_set">Alarm set</string>
     <string name="alarm_service_noti_content_title">Nap with DND</string>
     <string name="alarm_service_noti_content_text">Press the button below to stop</string>
