@@ -3,15 +3,12 @@ package rocks.eth4.napwithdnd
 import android.app.*
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
 import android.media.AudioManager
 import android.media.MediaPlayer
 import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Build
 import android.os.IBinder
-import android.support.annotation.RequiresApi
-import android.support.v4.app.NotificationCompat
 import android.util.Log
 import java.io.IOException
 
@@ -22,8 +19,6 @@ import java.io.IOException
 class AlarmService: Service() {
     companion object {
         private val TAG = AlarmService::class.java.simpleName
-        private val ACTION_STOP_SERVICE = "rocks.eth4.napwithdnd.ACTION_STOP_SERVICE"
-        private val NOTIFICATION_ID = 8964000
     }
 
     private val mMediaPlayer = MediaPlayer()
@@ -37,7 +32,8 @@ class AlarmService: Service() {
         }
 
 
-        createForegroundNotification()
+        val notification = NotificationUtils.getFiringAlarmNotification(applicationContext)
+        startForeground(FIRING_ALARM_NOTIFICATION_ID, notification)
         playSound(context = applicationContext, alert = getAlarmUri())
 
         return Service.START_REDELIVER_INTENT
@@ -78,40 +74,12 @@ class AlarmService: Service() {
     }
 
 
-    private fun createForegroundNotification() {
-        val channelId =
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    AppUtil.createNotificationChannel(applicationContext, "nap_with_dnd_service", "Nap with DND service")
-                } else {
-                    // If earlier version channel ID is not used
-                    // https://developer.android.com/reference/android/support/v4/app/NotificationCompat.Builder.html#NotificationCompat.Builder(android.content.Context)
-                    ""
-                }
-        val notificationBuilder = NotificationCompat.Builder(this, channelId)
-
-        notificationBuilder.setWhen(System.currentTimeMillis())
-                .setOngoing(true)
-                .setSmallIcon(R.drawable.ic_dnd_nap_silhouette)
-                .setContentTitle(getString(R.string.alarm_service_noti_content_title))
-                .setContentText(getString(R.string.alarm_service_noti_content_text))
-                .setCategory(NotificationCompat.CATEGORY_SERVICE)
-                .priority = NotificationCompat.PRIORITY_HIGH
-
-        val stopSelf = Intent(this, AlarmService::class.java)
-        stopSelf.action = ACTION_STOP_SERVICE
-        val pStopSelf = PendingIntent.getService(this, 0, stopSelf, PendingIntent.FLAG_CANCEL_CURRENT)
-        notificationBuilder.addAction(R.drawable.ic_access_alarm_black_24dp, "Stop Timer", pStopSelf)
-        //        manager.notify(NOTIFICATION_ID, builder.build());
-        val notification = notificationBuilder.build()
-
-        startForeground(NOTIFICATION_ID, notification)
-    }
 
 
    override fun onDestroy() {
         super.onDestroy()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            AppUtil.turnOffDoNotDisturb(applicationContext)
+            AppUtils.turnOffDoNotDisturb(applicationContext)
         }
     }
 }

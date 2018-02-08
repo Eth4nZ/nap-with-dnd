@@ -30,6 +30,7 @@ class MainActivity : AppCompatActivity() {
     var value_tens_place = 0
 
     val btnOneMin: Button by lazy { findViewById<Button>(R.id.set_alarm_1_min) }
+    val btnTest: Button by lazy { findViewById<Button>(R.id.test_noti) }
     val npTensPlace: NumberPicker by lazy { findViewById<NumberPicker>(R.id.np_tens_place)}
     val npOnesPlace: NumberPicker by lazy { findViewById<NumberPicker>(R.id.np_ones_place)}
 
@@ -64,38 +65,27 @@ class MainActivity : AppCompatActivity() {
                 .subscribe(
                         { _ ->
                             Log.d(TAG, "clicked")
-                            createNotification((value_tens_place*10+value_ones_place))
+                            NotificationUtils.createUpcomingAlarmNotification(applicationContext, (value_tens_place*10+value_ones_place))
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                                AppUtil.turnOnDoNotDisturb(applicationContext)
+                                AppUtils.turnOnDoNotDisturb(applicationContext)
                             }
                         },
                         { error -> Log.e(TAG, error.message) }
                 )
+
+        btnTest.clicks()
+                .doOnNext {
+                    NotificationUtils.createUpcomingAlarmNotification(applicationContext, (value_tens_place*10+value_ones_place))
+                    Log.d(TAG, "test button clicked ")
+                }
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(){}
 
         setupComponents()
 
 
     }
 
-    private fun createNotification(durationInMinute: Int) {
-        val channelId =
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    AppUtil.createNotificationChannel(applicationContext, "dnd_dismissable_notification", "DND dismissable notification")
-                } else {
-                    // If earlier version channel ID is not used
-                    // https://developer.android.com/reference/android/support/v4/app/NotificationCompat.Builder.html#NotificationCompat.Builder(android.content.Context)
-                    ""
-                }
-        //todo: pop up a notification to inform user the alarm has been set
-        val mBuilder = NotificationCompat.Builder(this, channelId)
-                .setSmallIcon(R.drawable.ic_dnd_nap_silhouette)
-                .setContentTitle(getString(R.string.upcoming_alarm))
-                .setContentText(durationInMinute.toString())
-                .setPriority(NotificationCompat.PRIORITY_HIGH)
-
-        val mNotifyManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-        mNotifyManager.notify(++notificationId, mBuilder.build());
-    }
 
 
     private fun setupComponents() {
