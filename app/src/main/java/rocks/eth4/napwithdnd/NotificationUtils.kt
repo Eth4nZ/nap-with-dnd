@@ -39,6 +39,11 @@ class NotificationUtils() {
             mNotifyManager.notify(UPCOMING_ALARM_NOTIFICATION_ID, mBuilder.build());
         }
 
+        fun cancelUpcomingAlarmNotification(context: Context){
+            val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.cancel(UPCOMING_ALARM_NOTIFICATION_ID)
+        }
+
         fun getFiringAlarmNotification(context: Context): Notification {
             val channelId =
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

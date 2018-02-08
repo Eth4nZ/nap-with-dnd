@@ -9,8 +9,7 @@ import android.media.MediaPlayer
 import android.net.Uri
 import java.io.IOException
 import android.media.RingtoneManager
-
-
+import android.os.Build
 
 
 /**
@@ -27,7 +26,12 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
         Log.d(TAG, "received")
         val mIntent = Intent(context, AlarmService::class.java)
         context?.stopService(mIntent)
-        context?.startService(mIntent)
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O) {
+            context?.startForegroundService(mIntent)
+        }
+        else {
+            context?.startService(mIntent)
+        }
     }
 
 

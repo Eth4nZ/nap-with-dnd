@@ -55,7 +55,6 @@ class MainActivity : AppCompatActivity() {
                 .subscribe(
                         { _ ->
                             Log.d(TAG, "clicked")
-                            NotificationUtils.createUpcomingAlarmNotification(applicationContext, (value_tens_place*10+value_ones_place))
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                                 AppUtils.turnOnDoNotDisturb(applicationContext)
                             }
@@ -76,8 +75,19 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    override fun onPause() {
+        super.onPause()
+        if (AlarmUtils.isAlarmScheduled(applicationContext)) {
+            NotificationUtils.createUpcomingAlarmNotification(applicationContext, 0)
+        }
+    }
 
-
+    override fun onResume() {
+        super.onResume()
+        if (AlarmUtils.isAlarmScheduled(applicationContext)) {
+            NotificationUtils.cancelUpcomingAlarmNotification(applicationContext)
+        }
+    }
 
     private fun setupComponents() {
         val sharedPref = PreferenceManager.getDefaultSharedPreferences(this)

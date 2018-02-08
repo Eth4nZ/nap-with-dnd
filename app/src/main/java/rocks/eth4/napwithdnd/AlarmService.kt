@@ -34,6 +34,7 @@ class AlarmService: Service() {
 
         val notification = NotificationUtils.getFiringAlarmNotification(applicationContext)
         startForeground(FIRING_ALARM_NOTIFICATION_ID, notification)
+        NotificationUtils.cancelUpcomingAlarmNotification(applicationContext)
         playSound(context = applicationContext, alert = getAlarmUri())
 
         return Service.START_REDELIVER_INTENT
