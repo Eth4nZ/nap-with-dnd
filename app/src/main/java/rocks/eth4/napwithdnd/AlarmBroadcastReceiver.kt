@@ -20,6 +20,7 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
 
     companion object {
         val TAG = AlarmBroadcastReceiver::class.java.simpleName!!
+        const val ACTION_ALARM_BROADCAST_RECEIVER = "action_alarm_broadcast_receiver"
     }
 
     override fun onReceive(context: Context?, intent: Intent?) {

@@ -44,21 +44,11 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
 
-        val alarmManager: AlarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
 
 
         btnOneMin.clicks()
                 .doOnNext {
-                    val intent = Intent(applicationContext, AlarmBroadcastReceiver::class.java)
-                    val pendingIntent = PendingIntent.getBroadcast(applicationContext,
-                            0, intent, PendingIntent.FLAG_CANCEL_CURRENT)
-
-                    alarmManager.setExact(
-                            AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                            SystemClock.elapsedRealtime() + (value_tens_place*10+value_ones_place)*60*1000,
-                            pendingIntent
-                    )
-
+                    AlarmUtils.scheduleAlarm(applicationContext, value_tens_place*10+value_ones_place)
                     Toast.makeText(applicationContext, getString(R.string.alarm_set), Toast.LENGTH_SHORT).show()
                 }
                 .observeOn(AndroidSchedulers.mainThread())
@@ -85,6 +75,7 @@ class MainActivity : AppCompatActivity() {
 
 
     }
+
 
 
 
