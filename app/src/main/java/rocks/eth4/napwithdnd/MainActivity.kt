@@ -1,15 +1,10 @@
 package rocks.eth4.napwithdnd
 
-import android.app.AlarmManager
-import android.app.NotificationManager
-import android.app.PendingIntent
 import android.content.Context
-import android.content.Intent
 import android.content.res.Resources
 import android.os.Build
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.os.SystemClock
 import android.preference.PreferenceManager
 import android.support.v4.content.ContextCompat
 import android.util.Log
@@ -18,8 +13,6 @@ import android.widget.NumberPicker
 import android.widget.Toast
 import com.jakewharton.rxbinding2.view.clicks
 import io.reactivex.android.schedulers.AndroidSchedulers
-import android.support.v4.app.NotificationCompat
-
 
 
 class MainActivity : AppCompatActivity() {
@@ -56,7 +49,7 @@ class MainActivity : AppCompatActivity() {
                         { _ ->
                             Log.d(TAG, "clicked")
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                                AppUtils.turnOnDoNotDisturb(applicationContext)
+                                DndUtils.turnOnDoNotDisturb(applicationContext)
                             }
                         },
                         { error -> Log.e(TAG, error.message) }

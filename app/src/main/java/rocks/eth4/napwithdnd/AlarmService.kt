@@ -80,7 +80,7 @@ class AlarmService: Service() {
    override fun onDestroy() {
         super.onDestroy()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            AppUtils.turnOffDoNotDisturb(applicationContext)
+            DndUtils.turnOffDoNotDisturb(applicationContext)
         }
     }
 }

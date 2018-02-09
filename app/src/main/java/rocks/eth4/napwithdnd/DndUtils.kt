@@ -17,7 +17,7 @@ import android.widget.Toast
  * Created by eth4 on 7/2/18.
  */
 
-class AppUtils() {
+class DndUtils() {
 
 
     companion object {

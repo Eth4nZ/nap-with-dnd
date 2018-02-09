@@ -63,14 +63,17 @@ class NotificationUtils() {
                     .setCategory(NotificationCompat.CATEGORY_SERVICE)
                     .priority = NotificationCompat.PRIORITY_HIGH
 
-            val stopSelf = Intent(context, AlarmService::class.java)
-            stopSelf.action = ACTION_STOP_SERVICE
-            val pStopSelf = PendingIntent.getService(context, 0, stopSelf, PendingIntent.FLAG_CANCEL_CURRENT)
-            notificationBuilder.addAction(R.drawable.ic_access_alarm_black_24dp, "Stop Timer", pStopSelf)
-            //        manager.notify(NOTIFICATION_ID, builder.build());
-            val notification = notificationBuilder.build()
+            val stopSelfIntent = Intent(context, AlarmService::class.java)
+            stopSelfIntent.action = ACTION_STOP_SERVICE
+            val stopSelfPendingIntent = PendingIntent.getService(context, 0, stopSelfIntent, PendingIntent.FLAG_CANCEL_CURRENT)
+            notificationBuilder.addAction(R.drawable.ic_access_alarm_black_24dp, "Stop Timer", stopSelfPendingIntent)
 
-            return notification
+            val openActivityIntent = Intent(context, FiringAlarmActivity::class.java)
+            openActivityIntent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
+            val openActivityPendingIntent = PendingIntent.getActivity(context, 0, openActivityIntent, 0)
+            notificationBuilder.setContentIntent(openActivityPendingIntent)
+
+            return notificationBuilder.build()
         }
 
 
