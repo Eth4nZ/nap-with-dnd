@@ -35,6 +35,11 @@ class NotificationUtils() {
                     .setSound(null)
                     .setVibrate(null)
 
+            val openActivityIntent = Intent(context, MainActivity::class.java)
+            openActivityIntent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
+            val openActivityPendingIntent = PendingIntent.getActivity(context, 0, openActivityIntent, 0)
+            mBuilder.setContentIntent(openActivityPendingIntent)
+
             val mNotifyManager = context.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
             mNotifyManager.notify(UPCOMING_ALARM_NOTIFICATION_ID, mBuilder.build());
         }
