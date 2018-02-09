@@ -71,7 +71,7 @@ class MainActivity : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         if (AlarmUtils.isAlarmScheduled(applicationContext)) {
-            NotificationUtils.createUpcomingAlarmNotification(applicationContext, 0)
+            NotificationUtils.createUpcomingAlarmNotification(applicationContext, (value_tens_place*10+value_ones_place))
         }
     }
 

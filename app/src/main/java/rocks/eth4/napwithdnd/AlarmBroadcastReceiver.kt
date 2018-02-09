@@ -22,15 +22,23 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
         const val ACTION_ALARM_BROADCAST_RECEIVER = "action_alarm_broadcast_receiver"
     }
 
+
+
     override fun onReceive(context: Context?, intent: Intent?) {
-        Log.d(TAG, "received")
+        if (context == null){
+            Log.e(TAG, "alarm broadcast received, however context is null")
+            return
+        }
+        else
+            Log.d(TAG, "alarm broadcast received")
         val mIntent = Intent(context, AlarmService::class.java)
-        context?.stopService(mIntent)
+        context.stopService(mIntent)
+        NotificationUtils.cancelUpcomingAlarmNotification(context)
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O) {
-            context?.startForegroundService(mIntent)
+            context.startForegroundService(mIntent)
         }
         else {
-            context?.startService(mIntent)
+            context.startService(mIntent)
         }
     }
 
