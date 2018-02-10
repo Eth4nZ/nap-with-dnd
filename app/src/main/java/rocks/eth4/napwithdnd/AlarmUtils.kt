@@ -25,6 +25,9 @@ class AlarmUtils {
                     SystemClock.elapsedRealtime() + (durationInMin)*60*1000,
                     pendingIntent
             )
+            if (AlarmUtils.isAlarmScheduled(context)) {
+                NotificationUtils.createUpcomingAlarmNotification(context, durationInMin)
+            }
         }
 
         fun isAlarmScheduled(context: Context): Boolean{

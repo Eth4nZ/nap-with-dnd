@@ -70,16 +70,16 @@ class MainActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        if (AlarmUtils.isAlarmScheduled(applicationContext)) {
-            NotificationUtils.createUpcomingAlarmNotification(applicationContext, (value_tens_place*10+value_ones_place))
-        }
+//        if (AlarmUtils.isAlarmScheduled(applicationContext)) {
+//            NotificationUtils.createUpcomingAlarmNotification(applicationContext, (value_tens_place*10+value_ones_place))
+//        }
     }
 
     override fun onResume() {
         super.onResume()
-        if (AlarmUtils.isAlarmScheduled(applicationContext)) {
-            NotificationUtils.cancelUpcomingAlarmNotification(applicationContext)
-        }
+//        if (AlarmUtils.isAlarmScheduled(applicationContext)) {
+//            NotificationUtils.cancelUpcomingAlarmNotification(applicationContext)
+//        }
     }
 
     private fun setupComponents() {
