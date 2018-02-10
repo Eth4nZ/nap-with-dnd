@@ -7,6 +7,7 @@
     <string name="dismiss_alarm">Dismiss</string>
     <string name="set_alarm">Set Alarm</string>
     <string name="alarm_set">Alarm set</string>
+    <string name="alarm_dismissed">Alarm dismissed</string>
     <string name="alarm_service_noti_content_title">Nap with DND</string>
     <string name="alarm_service_noti_content_text">Alarm</string>
 

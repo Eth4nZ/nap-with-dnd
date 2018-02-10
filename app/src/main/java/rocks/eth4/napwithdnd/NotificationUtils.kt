@@ -11,6 +11,8 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import android.support.v4.app.NotificationCompat
+import java.text.SimpleDateFormat
+import java.util.*
 
 /**
  * Created by eth4 on 8/2/18.
@@ -31,7 +33,7 @@ class NotificationUtils {
             val notificationBuilder = NotificationCompat.Builder(context, channelId)
                     .setSmallIcon(R.drawable.ic_dnd_nap_silhouette)
                     .setContentTitle(context.getString(R.string.upcoming_alarm))
-                    .setContentText(durationInMinute.toString())
+                    .setContentText(getFiringTimeString(durationInMinute))
                     .setSound(null)
                     .setVibrate(null)
 
@@ -115,5 +117,13 @@ class NotificationUtils {
             return channelId
         }
 
+        fun getFiringTimeString(durationInMinute: Int): String {
+            val firingTimestamp = Calendar.getInstance().timeInMillis + durationInMinute*60*1000
+            return convertTimestampToTimeString(firingTimestamp)
+        }
+
+        fun convertTimestampToTimeString(timestamp: Long): String {
+            return SimpleDateFormat("EEE HH:mm", Locale.getDefault()).format(timestamp)
+        }
     }
 }

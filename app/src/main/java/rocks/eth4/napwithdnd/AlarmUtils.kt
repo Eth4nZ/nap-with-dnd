@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Context.ALARM_SERVICE
 import android.content.Intent
 import android.os.SystemClock
+import android.widget.Toast
 
 /**
  * Created by eth4 on 8/2/18.
@@ -14,7 +15,7 @@ class AlarmUtils {
 
     companion object {
 
-        fun scheduleAlarm(context: Context, durationInMin: Int){
+        fun scheduleAlarm(context: Context, durationInMinute: Int){
             val alarmManager: AlarmManager = context.getSystemService(ALARM_SERVICE) as AlarmManager
             val intent = Intent(context, AlarmBroadcastReceiver::class.java)
             intent.action = AlarmBroadcastReceiver.ACTION_FIRE_ALARM
@@ -22,11 +23,11 @@ class AlarmUtils {
 
             alarmManager.setExact(
                     AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                    SystemClock.elapsedRealtime() + (durationInMin)*60*1000,
+                    SystemClock.elapsedRealtime() + (durationInMinute)*60*1000,
                     pendingIntent
             )
             if (AlarmUtils.isAlarmScheduled(context)) {
-                NotificationUtils.createUpcomingAlarmNotification(context, durationInMin)
+                NotificationUtils.createUpcomingAlarmNotification(context, durationInMinute)
             }
         }
 
@@ -49,6 +50,7 @@ class AlarmUtils {
         fun stopAlarm(context: Context){
             cancelScheduledAlarm(context)
             NotificationUtils.cancelUpcomingAlarmNotification(context)
+            Toast.makeText(context, context.getString(R.string.alarm_dismissed), Toast.LENGTH_SHORT).show()
         }
     }
 }

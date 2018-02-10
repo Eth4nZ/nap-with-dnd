@@ -23,7 +23,6 @@ class MainActivity : AppCompatActivity() {
     var value_tens_place = 0
 
     val btnOneMin: Button by lazy { findViewById<Button>(R.id.set_alarm_1_min) }
-    val btnTest: Button by lazy { findViewById<Button>(R.id.test_noti) }
     val npTensPlace: NumberPicker by lazy { findViewById<NumberPicker>(R.id.np_tens_place)}
     val npOnesPlace: NumberPicker by lazy { findViewById<NumberPicker>(R.id.np_ones_place)}
 
@@ -55,14 +54,6 @@ class MainActivity : AppCompatActivity() {
                         { error -> Log.e(TAG, error.message) }
                 )
 
-        btnTest.clicks()
-                .doOnNext {
-                    NotificationUtils.createUpcomingAlarmNotification(applicationContext, (value_tens_place*10+value_ones_place))
-                    Log.d(TAG, "test button clicked ")
-                }
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(){}
-
         setupComponents()
 
 
@@ -91,13 +82,13 @@ class MainActivity : AppCompatActivity() {
         npTensPlace.minValue = 0
         npTensPlace.maxValue = 9
         npTensPlace.value = value_tens_place
-        npTensPlace.setOnValueChangedListener { picker, oldVal, newVal -> updateTimerValue() }
+        npTensPlace.setOnValueChangedListener { _, _, _ -> updateTimerValue() }
 
         updateNumberPickerDivider(applicationContext, npOnesPlace)
         npOnesPlace.minValue = 0
         npOnesPlace.maxValue = 9
         npOnesPlace.value = value_ones_place
-        npOnesPlace.setOnValueChangedListener { picker, oldVal, newVal -> updateTimerValue() }
+        npOnesPlace.setOnValueChangedListener { _, _, _ -> updateTimerValue() }
 
     }
 
