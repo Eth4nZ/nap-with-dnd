@@ -17,7 +17,7 @@ class AlarmUtils() {
         fun scheduleAlarm(context: Context, durationInMin: Int){
             val alarmManager: AlarmManager = context.getSystemService(ALARM_SERVICE) as AlarmManager
             val intent = Intent(context, AlarmBroadcastReceiver::class.java)
-            intent.action = AlarmBroadcastReceiver.ACTION_ALARM_BROADCAST_RECEIVER
+            intent.action = AlarmBroadcastReceiver.ACTION_FIRE_ALARM
             val pendingIntent = PendingIntent.getBroadcast(context,0, intent, PendingIntent.FLAG_CANCEL_CURRENT)
 
             alarmManager.setExact(
@@ -29,7 +29,7 @@ class AlarmUtils() {
 
         fun isAlarmScheduled(context: Context): Boolean{
             val intent = Intent(context, AlarmBroadcastReceiver::class.java)
-            intent.action = AlarmBroadcastReceiver.ACTION_ALARM_BROADCAST_RECEIVER
+            intent.action = AlarmBroadcastReceiver.ACTION_FIRE_ALARM
             val isScheduled = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_NO_CREATE) != null
             return isScheduled
         }
@@ -37,7 +37,7 @@ class AlarmUtils() {
         fun stopAlarm(context: Context) {
             val alarmManager: AlarmManager = context.getSystemService(ALARM_SERVICE) as AlarmManager
             val intent = Intent(context, AlarmBroadcastReceiver::class.java)
-            intent.action = AlarmBroadcastReceiver.ACTION_ALARM_BROADCAST_RECEIVER
+            intent.action = AlarmBroadcastReceiver.ACTION_FIRE_ALARM
             val pendingIntent = PendingIntent.getBroadcast(context,0, intent, PendingIntent.FLAG_CANCEL_CURRENT)
             alarmManager.cancel(pendingIntent)
             pendingIntent.cancel()

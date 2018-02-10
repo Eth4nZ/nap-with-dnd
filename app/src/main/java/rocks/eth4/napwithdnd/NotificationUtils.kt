@@ -28,7 +28,7 @@ class NotificationUtils() {
                         // https://developer.android.com/reference/android/support/v4/app/NotificationCompat.Builder.html#NotificationCompat.Builder(android.content.Context)
                         ""
                     }
-            val mBuilder = NotificationCompat.Builder(context, channelId)
+            val notificationBuilder = NotificationCompat.Builder(context, channelId)
                     .setSmallIcon(R.drawable.ic_dnd_nap_silhouette)
                     .setContentTitle(context.getString(R.string.upcoming_alarm))
                     .setContentText(durationInMinute.toString())
@@ -38,10 +38,16 @@ class NotificationUtils() {
             val openActivityIntent = Intent(context, MainActivity::class.java)
             openActivityIntent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
             val openActivityPendingIntent = PendingIntent.getActivity(context, 0, openActivityIntent, 0)
-            mBuilder.setContentIntent(openActivityPendingIntent)
+            notificationBuilder.setContentIntent(openActivityPendingIntent)
+
+
+            val cancelAlarmIntent = Intent(context, UpcomingNotificationActionBroadcastReceiver::class.java)
+            cancelAlarmIntent.action = UpcomingNotificationActionBroadcastReceiver.ACTION_DISMISS_ALARM
+            val cancelAlarmPendingIntent = PendingIntent.getBroadcast(context, 0, cancelAlarmIntent, 0)
+            notificationBuilder.addAction(R.drawable.ic_access_alarm_black_24dp, context.getString(R.string.dismiss_alarm), cancelAlarmPendingIntent)
 
             val mNotifyManager = context.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-            mNotifyManager.notify(UPCOMING_ALARM_NOTIFICATION_ID, mBuilder.build());
+            mNotifyManager.notify(UPCOMING_ALARM_NOTIFICATION_ID, notificationBuilder.build());
         }
 
         fun cancelUpcomingAlarmNotification(context: Context){
@@ -71,7 +77,7 @@ class NotificationUtils() {
             val stopSelfIntent = Intent(context, AlarmService::class.java)
             stopSelfIntent.action = ACTION_STOP_SERVICE
             val stopSelfPendingIntent = PendingIntent.getService(context, 0, stopSelfIntent, PendingIntent.FLAG_CANCEL_CURRENT)
-            notificationBuilder.addAction(R.drawable.ic_access_alarm_black_24dp, "Stop Timer", stopSelfPendingIntent)
+            notificationBuilder.addAction(R.drawable.ic_access_alarm_black_24dp, context.getString(R.string.dismiss_alarm), stopSelfPendingIntent)
 
             val openActivityIntent = Intent(context, FiringAlarmActivity::class.java)
             openActivityIntent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP

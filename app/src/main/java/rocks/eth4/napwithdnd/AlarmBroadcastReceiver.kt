@@ -19,7 +19,7 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
 
     companion object {
         val TAG = AlarmBroadcastReceiver::class.java.simpleName!!
-        const val ACTION_ALARM_BROADCAST_RECEIVER = "action_alarm_broadcast_receiver"
+        const val ACTION_FIRE_ALARM = "rocks.eth4.action.fire.alarm"
     }
 
 
@@ -31,14 +31,15 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
         }
         else
             Log.d(TAG, "alarm broadcast received")
-        val mIntent = Intent(context, AlarmService::class.java)
-        context.stopService(mIntent)
-        NotificationUtils.cancelUpcomingAlarmNotification(context)
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O) {
-            context.startForegroundService(mIntent)
-        }
-        else {
-            context.startService(mIntent)
+        if (intent?.action == ACTION_FIRE_ALARM) {
+            val mIntent = Intent(context, AlarmService::class.java)
+            context.stopService(mIntent)
+            NotificationUtils.cancelUpcomingAlarmNotification(context)
+            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O) {
+                context.startForegroundService(mIntent)
+            } else {
+                context.startService(mIntent)
+            }
         }
     }
 
