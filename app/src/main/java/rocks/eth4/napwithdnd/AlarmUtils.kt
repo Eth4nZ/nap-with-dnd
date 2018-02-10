@@ -10,7 +10,7 @@ import android.os.SystemClock
 /**
  * Created by eth4 on 8/2/18.
  */
-class AlarmUtils() {
+class AlarmUtils {
 
     companion object {
 
@@ -34,13 +34,18 @@ class AlarmUtils() {
             return isScheduled
         }
 
-        fun stopAlarm(context: Context) {
+        fun cancelScheduledAlarm(context: Context) {
             val alarmManager: AlarmManager = context.getSystemService(ALARM_SERVICE) as AlarmManager
             val intent = Intent(context, AlarmBroadcastReceiver::class.java)
             intent.action = AlarmBroadcastReceiver.ACTION_FIRE_ALARM
             val pendingIntent = PendingIntent.getBroadcast(context,0, intent, PendingIntent.FLAG_CANCEL_CURRENT)
             alarmManager.cancel(pendingIntent)
             pendingIntent.cancel()
+        }
+
+        fun stopAlarm(context: Context){
+            cancelScheduledAlarm(context)
+            NotificationUtils.cancelUpcomingAlarmNotification(context)
         }
     }
 }

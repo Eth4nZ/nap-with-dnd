@@ -21,6 +21,8 @@
 
         <receiver android:name=".AlarmBroadcastReceiver" />
 
+        <receiver android:name=".UpcomingNotificationActionBroadcastReceiver" />
+
         <service android:name=".AlarmService" />
 
         <activity android:name=".FiringAlarmActivity"></activity>

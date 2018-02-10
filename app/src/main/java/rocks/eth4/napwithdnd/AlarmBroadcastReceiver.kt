@@ -19,7 +19,7 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
 
     companion object {
         val TAG = AlarmBroadcastReceiver::class.java.simpleName!!
-        const val ACTION_FIRE_ALARM = "rocks.eth4.action.fire.alarm"
+        const val ACTION_FIRE_ALARM = "rocks.eth4.napwithdnd.action.fire.alarm"
     }
 
 

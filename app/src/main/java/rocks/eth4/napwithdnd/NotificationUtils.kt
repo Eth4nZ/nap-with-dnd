@@ -15,7 +15,7 @@ import android.support.v4.app.NotificationCompat
 /**
  * Created by eth4 on 8/2/18.
  */
-class NotificationUtils() {
+class NotificationUtils {
 
 
     companion object {
@@ -39,7 +39,6 @@ class NotificationUtils() {
             openActivityIntent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
             val openActivityPendingIntent = PendingIntent.getActivity(context, 0, openActivityIntent, 0)
             notificationBuilder.setContentIntent(openActivityPendingIntent)
-
 
             val cancelAlarmIntent = Intent(context, UpcomingNotificationActionBroadcastReceiver::class.java)
             cancelAlarmIntent.action = UpcomingNotificationActionBroadcastReceiver.ACTION_DISMISS_ALARM
