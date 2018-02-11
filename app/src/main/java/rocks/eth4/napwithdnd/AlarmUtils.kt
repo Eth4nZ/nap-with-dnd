@@ -19,7 +19,7 @@ class AlarmUtils {
             val alarmManager: AlarmManager = context.getSystemService(ALARM_SERVICE) as AlarmManager
             val intent = Intent(context, AlarmBroadcastReceiver::class.java)
             intent.action = AlarmBroadcastReceiver.ACTION_FIRE_ALARM
-            val pendingIntent = PendingIntent.getBroadcast(context,0, intent, PendingIntent.FLAG_CANCEL_CURRENT)
+            val pendingIntent = PendingIntent.getBroadcast(context, AlarmBroadcastReceiver.REQUEST_CODE_FIRE_ALARM, intent, PendingIntent.FLAG_CANCEL_CURRENT)
 
             alarmManager.setExact(
                     AlarmManager.ELAPSED_REALTIME_WAKEUP,
@@ -34,7 +34,7 @@ class AlarmUtils {
         fun isAlarmScheduled(context: Context): Boolean{
             val intent = Intent(context, AlarmBroadcastReceiver::class.java)
             intent.action = AlarmBroadcastReceiver.ACTION_FIRE_ALARM
-            val isScheduled = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_NO_CREATE) != null
+            val isScheduled = PendingIntent.getBroadcast(context, AlarmBroadcastReceiver.REQUEST_CODE_FIRE_ALARM, intent, PendingIntent.FLAG_NO_CREATE) != null
             return isScheduled
         }
 
@@ -42,7 +42,7 @@ class AlarmUtils {
             val alarmManager: AlarmManager = context.getSystemService(ALARM_SERVICE) as AlarmManager
             val intent = Intent(context, AlarmBroadcastReceiver::class.java)
             intent.action = AlarmBroadcastReceiver.ACTION_FIRE_ALARM
-            val pendingIntent = PendingIntent.getBroadcast(context,0, intent, PendingIntent.FLAG_CANCEL_CURRENT)
+            val pendingIntent = PendingIntent.getBroadcast(context, AlarmBroadcastReceiver.REQUEST_CODE_FIRE_ALARM, intent, PendingIntent.FLAG_CANCEL_CURRENT)
             alarmManager.cancel(pendingIntent)
             pendingIntent.cancel()
         }

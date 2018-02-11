@@ -20,6 +20,9 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
     companion object {
         val TAG = AlarmBroadcastReceiver::class.java.simpleName!!
         const val ACTION_FIRE_ALARM = "rocks.eth4.napwithdnd.action.fire.alarm"
+        const val ACTION_DISMISS_ALARM = "rocks.eth4.napwithdnd.action.dismiss.alarm"
+        const val REQUEST_CODE_FIRE_ALARM = 940101
+        const val REQUEST_CODE_DISMISS_ALARM = 940201
     }
 
 
@@ -30,7 +33,8 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
             return
         }
         else
-            Log.d(TAG, "alarm broadcast received")
+            Log.v(TAG, "alarm broadcast received")
+
         if (intent?.action == ACTION_FIRE_ALARM) {
             val mIntent = Intent(context, AlarmService::class.java)
             context.stopService(mIntent)
@@ -39,6 +43,12 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
                 context.startForegroundService(mIntent)
             } else {
                 context.startService(mIntent)
+            }
+        }
+        else if (intent?.action == ACTION_DISMISS_ALARM) {
+            AlarmUtils.stopAlarm(context)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                DndUtils.turnOffDoNotDisturb(context)
             }
         }
     }

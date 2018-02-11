@@ -42,9 +42,9 @@ class NotificationUtils {
             val openActivityPendingIntent = PendingIntent.getActivity(context, 0, openActivityIntent, 0)
             notificationBuilder.setContentIntent(openActivityPendingIntent)
 
-            val cancelAlarmIntent = Intent(context, UpcomingNotificationActionBroadcastReceiver::class.java)
-            cancelAlarmIntent.action = UpcomingNotificationActionBroadcastReceiver.ACTION_DISMISS_ALARM
-            val cancelAlarmPendingIntent = PendingIntent.getBroadcast(context, 0, cancelAlarmIntent, 0)
+            val cancelAlarmIntent = Intent(context, AlarmBroadcastReceiver::class.java)
+            cancelAlarmIntent.action = AlarmBroadcastReceiver.ACTION_DISMISS_ALARM
+            val cancelAlarmPendingIntent = PendingIntent.getBroadcast(context, AlarmBroadcastReceiver.REQUEST_CODE_DISMISS_ALARM, cancelAlarmIntent, 0)
             notificationBuilder.addAction(R.drawable.ic_access_alarm_black_24dp, context.getString(R.string.dismiss_alarm), cancelAlarmPendingIntent)
 
             val mNotifyManager = context.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
