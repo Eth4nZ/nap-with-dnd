@@ -11,7 +11,8 @@
     <string name="alarm_service_noti_content_title">Nap with DND</string>
     <string name="alarm_service_noti_content_text">Alarm</string>
 
-    <string name="do_not_disturb_enabled">Do not disturb enabled</string>
+    <string name="do_not_disturb_enabled">Do not disturb ON</string>
+    <string name="do_not_disturb_disabled">Do not disturb OFF</string>
     <string name="do_not_disturb_permission_request">this app needs Do Not Disturb access</string>
 
 

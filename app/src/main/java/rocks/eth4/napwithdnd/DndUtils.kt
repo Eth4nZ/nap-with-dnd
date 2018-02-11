@@ -43,7 +43,7 @@ class DndUtils() {
             if (mNotificationManager.isNotificationPolicyAccessGranted) {
                 if (mNotificationManager.currentInterruptionFilter == NotificationManager.INTERRUPTION_FILTER_ALARMS) {
                     mNotificationManager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_ALL)
-                    Toast.makeText(context, context.getString(R.string.do_not_disturb_enabled), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, context.getString(R.string.do_not_disturb_disabled), Toast.LENGTH_SHORT).show();
                 }
             } else {
                 val intent = Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS)
