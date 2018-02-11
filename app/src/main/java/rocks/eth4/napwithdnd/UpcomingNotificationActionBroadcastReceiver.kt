@@ -3,6 +3,7 @@ package rocks.eth4.napwithdnd
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.util.Log
 
 
@@ -28,6 +29,9 @@ class UpcomingNotificationActionBroadcastReceiver : BroadcastReceiver() {
 
         if (intent?.action == ACTION_DISMISS_ALARM) {
             AlarmUtils.stopAlarm(context)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                DndUtils.turnOffDoNotDisturb(context)
+            }
         }
 
     }
