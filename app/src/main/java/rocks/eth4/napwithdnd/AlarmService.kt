@@ -25,7 +25,7 @@ class AlarmService: Service() {
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
         if (ACTION_STOP_SERVICE == intent.action) {
-            Log.d(TAG, "called to cancel service")
+            Log.v(TAG, "called to cancel alarm service")
             mMediaPlayer.stop()
             stopSelf()
             return Service.START_REDELIVER_INTENT
@@ -34,7 +34,11 @@ class AlarmService: Service() {
 
         val notification = NotificationUtils.getFiringAlarmNotification(applicationContext)
         startForeground(FIRING_ALARM_NOTIFICATION_ID, notification)
-        playSound(context = applicationContext, alert = getAlarmUri())
+        val alarmUri = getAlarmUri()
+        if (alarmUri != null)
+            playSound(context = applicationContext, alert = alarmUri)
+        else
+            Log.e(TAG, "Failed to load alarm URI")
 
         return Service.START_REDELIVER_INTENT
     }
@@ -50,15 +54,16 @@ class AlarmService: Service() {
                 mMediaPlayer.start()
             }
         } catch (e: IOException) {
-            println("OOPS")
+            Log.e(TAG, e.toString())
         }
 
     }
 
-    private fun getAlarmUri(): Uri {
+    private fun getAlarmUri(): Uri? {
         var alert: Uri? = RingtoneManager
                 .getDefaultUri(RingtoneManager.TYPE_ALARM)
         if (alert == null) {
+            Log.e(TAG, "Failed to load alarm uri")
             alert = RingtoneManager
                     .getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
             if (alert == null) {
@@ -66,7 +71,7 @@ class AlarmService: Service() {
                         .getDefaultUri(RingtoneManager.TYPE_RINGTONE)
             }
         }
-        return alert!!
+        return alert
     }
 
     override fun onBind(intent: Intent?): IBinder? {
